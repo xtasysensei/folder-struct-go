@@ -15,27 +15,6 @@ Run the script with a project name as an argument:
 ```bash
 ./script_name.sh my-awesome-project
 ```
-## Project Structure
-The script creates the following directory structure and files:
-<project-name>/
-├── cmd/
-│   └── main.go
-├── pkg/
-│   ├── handlers/
-│   │   └── handler.go
-│   ├── models/
-│   │   └── model.go
-│   ├── routes/
-│   │   └── routes.go
-│   └── utils/
-│       └── utils.go
-├── internal/
-│   └── config/
-│       └── config.go
-├── go.mod
-├── go.sum
-├── .env
-└── Makefile
 ## File Contents
 
 - main.go: Contains the entry point of the application, sets up environment variables, and starts the HTTP server.
