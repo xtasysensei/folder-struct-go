@@ -1,0 +1,143 @@
+#!/bin/bash
+
+PROJECT_NAME=$1
+
+if [ -z "$PROJECT_NAME" ]; then
+  echo "Usage: $0 <project-name>"
+  exit 1
+fi
+
+# Create main directories
+mkdir -p $PROJECT_NAME/cmd
+mkdir -p $PROJECT_NAME/pkg/handlers
+mkdir -p $PROJECT_NAME/pkg/models
+mkdir -p $PROJECT_NAME/pkg/routes
+mkdir -p $PROJECT_NAME/pkg/utils
+mkdir -p $PROJECT_NAME/internal/config
+
+# Create files
+touch $PROJECT_NAME/cmd/main.go
+touch $PROJECT_NAME/pkg/handlers/handler.go
+touch $PROJECT_NAME/pkg/models/model.go
+touch $PROJECT_NAME/pkg/routes/routes.go
+touch $PROJECT_NAME/pkg/utils/utils.go
+touch $PROJECT_NAME/internal/config/config.go
+touch $PROJECT_NAME/go.mod
+touch $PROJECT_NAME/go.sum
+touch $PROJECT_NAME/.env
+touch $PROJECT_NAME/Makefile
+
+# Populate main.go
+cat <<EOT > $PROJECT_NAME/cmd/main.go
+package main
+
+import (
+	"log"
+	"net/http"
+    
+    "github.com/joho/godotenv"
+	"github.com/yourusername/$PROJECT_NAME/pkg/routes"
+)
+
+func loadEnv() error {
+	return godotenv.Load(".env")
+}
+
+func main() {
+    err := loadEnv()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+	
+	router := routes.SetupRouter()
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+EOT
+
+# Populate routes.go
+cat <<EOT > $PROJECT_NAME/pkg/routes/routes.go
+package routes
+
+import (
+	
+)
+// get, post etc
+EOT
+
+# Populate handler.go
+cat <<EOT > $PROJECT_NAME/pkg/handlers/handler.go
+package handlers
+
+import (
+	"encoding/json"
+	"net/http"
+)
+
+// Define your handler functions here
+EOT
+
+# Populate model.go
+cat <<EOT > $PROJECT_NAME/pkg/models/model.go
+package models
+
+// Define your models here: type struct
+EOT
+
+# Populate utils.go
+cat <<EOT > $PROJECT_NAME/pkg/utils/utils.go
+package utils
+
+import (
+	
+)
+
+
+// Add your utility functions here: for database
+EOT
+
+# Populate config.go
+cat <<EOT > $PROJECT_NAME/internal/config/config.go
+package config
+
+// Add your configuration here
+EOT
+
+# Populate go.mod
+cat <<EOT > $PROJECT_NAME/go.mod
+module github.com/yourusername/$PROJECT_NAME
+
+go 1.22
+
+EOT
+
+# Populate makefile
+cat <<EOT > $PROJECT_NAME/internal/config/config.go
+# Variables
+BINARY=./tmp/main
+CMD=./cmd/main.go
+
+# Targets
+build: create-tmp
+	@echo "Building the application..."
+	@go build -o $(BINARY) $(CMD)
+
+test:
+	@echo "Running tests..."
+	@go test -v ./...
+
+run: build
+	@echo "Running the application..."
+	@$(BINARY)
+
+clean:
+	@echo "Cleaning up..."
+	@rm -f $(BINARY)
+
+create-tmp:
+	@mkdir -p ./tmp
+
+.PHONY: build test run clean create-tmp
+EOT
+
+# Inform completion
+echo "Project structure created for $PROJECT_NAME"
